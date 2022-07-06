@@ -64,7 +64,7 @@
     4. 로딩된 Class 파일을 Execution Engine을 통해 해석 및 실행
 - 8. JVM 메모리(Runtime Data Area) 구조
     
-    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b064607f-26c0-4887-ad8c-b3a1714b9a5e/Untitled.png)
+    <img width="660" alt="image" src="https://user-images.githubusercontent.com/84627144/177464955-0f059f83-1268-4954-9500-b1905d730036.png">
     
     - 메서드(static) 영역
         - 클래스가 사용되면 해당 클래스의 파일(.class)을 읽어들여, 클래스에 대한 정보(바이트 코드)를 메서드 영역에 저장
