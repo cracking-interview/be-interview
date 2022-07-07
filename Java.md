@@ -302,8 +302,7 @@
 
     | 목록 | Error | Exception |
     | --- | --- | --- |
-    | 발생 시점 | 런타임에서 발생, 컴파일 시점에서 알 수 없다.Checked Exception은 컴파일 시점에, 
-    Unchcked Exception은 런타임 시점에 알 수 있다.  |
+    | 발생 시점 | 런타임에서 발생, 컴파일 시점에서 알 수 없다. | Checked Exception은 컴파일 시점에, Unchcked Exception은 런타임 시점에 알 수 있다.  |
     | 복구 | 에러는 복구 불가능 | try catch 블락을 이용하여 복구 가능 |
     | 타입 | 모든 Error는 Unchecked Type | checked Type, Unchecked Type으로 분류 |
     | 예시 | OutOfMemory, StackOverFlow | 아래서 설명 |
