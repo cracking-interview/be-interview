@@ -1,4 +1,5 @@
-# 🐟 BE interview 
+# ❤️‍🔥 BE interview 
+
 <br/>
 
 ## 💪비전 및 목표
@@ -29,16 +30,22 @@ BE 인터뷰에 필요한 지식과 의사소통 능력을 기르자!
 1. CS 면접 질문(2~3h)
     - [백엔드 기술 면접 정리 Repo](https://github.com/backtony/Backend_Interview_for_Beginner)
     - [설로인 기술 면접 질문 Repo](https://github.com/sirloin-dev/meatplatform/blob/master/job-description/interview-questions.adoc)
+<br/>
+
 2. 자료 구조, 알고리즘
     - [https://covenant.tistory.com/235](https://covenant.tistory.com/235)
     - 자료구조(스택, 큐, 덱, 그래프, 트리), 수학, DP, 브루트 포스(순열, 재귀 비트마스크), BFS, 그리디, 분할 정복, 이분 탐색
     - [알고리즘 설명 링크 모음](https://github.com/tony9402/baekjoon/blob/main/link_for_study.md)
+<br/>
+
 3. 그 외 선택 사항(2h)
     - 블로그 글 쓰기
     - 글감은 자유 - 코테 문제 정리나 cs 정리 등
     - 경력 질문 관련 내용 정리 
     - 프로젝트 내용 정리 
     - 이력서 정리
+<br/>
+
 4. 같이 보면 좋을 공부 자료
     - https://github.com/brave-people/brave-tech-interview
     - [https://github.com/brave-people/brave-tech-interview/blob/main/contents/source.md](https://github.com/brave-people/brave-tech-interview/blob/main/contents/source.md)
