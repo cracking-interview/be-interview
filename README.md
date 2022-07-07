@@ -54,12 +54,13 @@ BE 인터뷰에 필요한 지식과 의사소통 능력을 기르자!
     - [정수원님 스프링 배치 강의](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%EB%B0%B0%EC%B9%98#)
     - [이동욱(jojoldu)님 블로그](https://jojoldu.tistory.com/)
     - [우아한 형제들 기술 블로그](https://techblog.woowahan.com/)
+    - [고퀄리티 개발 컨텐츠 모음](https://github.com/Integerous/goQuality-dev-contents/blob/master/README.md)
+    - [신입 개발자로서 성장을 위한 전공 지식](https://github.com/HyeminNoh/Tech-Stack)
+
     - 세미나 녹화 유튜브 채널
         - [우아한 테크 세미나](https://www.youtube.com/playlist?list=PLgXGHBqgT2TtGi82mCZWuhMu-nQy301ew)
         - [springcamp.io](https://www.youtube.com/user/springcampkr)
         - [OKKYCON](https://www.youtube.com/channel/UCuynXsGvMXLviyqVMeS2y-g)
-        - [고퀄리티 개발 컨텐츠 모음](https://github.com/Integerous/goQuality-dev-contents/blob/master/README.md)
-        - [신입 개발자로서 성장을 위한 전공 지식](https://github.com/HyeminNoh/Tech-Stack)
-
+        
 <br/>
 <br/>
