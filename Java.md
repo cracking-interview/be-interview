@@ -298,8 +298,8 @@
             - **관련성이 없는 클래스들의 논리적으로 같은 기능을 자신에 맞게 구현을 강제하는데 목적**
 - 26. Error, Exception
     
-    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/08fd81b1-b255-4507-974c-332c0915a3e1/Untitled.png)
-    
+    <img width="652" alt="image" src="https://user-images.githubusercontent.com/84627144/177681126-094c7d8f-c2c2-4b4b-a511-978969aefb21.png">
+
     | 목록 | Error | Exception |
     | --- | --- | --- |
     | 발생 시점 | 런타임에서 발생, 컴파일 시점에서 알 수 없다. | Checked Exception은 컴파일 시점에, 
@@ -330,7 +330,7 @@
     
     **Set과 List는 Collection 인터페이스를 구현하고 있고 Map은 인터페이스를 구현하고 있지 않다.**
     
-    [https://camo.githubusercontent.com/fe204aa5a0c4e2eb80fc1f58da005899f14a2d55ca11cfb850a1e1874ef766f0/68747470733a2f2f6261636b746f6e792e6769746875622e696f2f6173736574732f696d672f706f73742f696e746572766965772f6a6176612d312e504e47](https://camo.githubusercontent.com/fe204aa5a0c4e2eb80fc1f58da005899f14a2d55ca11cfb850a1e1874ef766f0/68747470733a2f2f6261636b746f6e792e6769746875622e696f2f6173736574732f696d672f706f73742f696e746572766965772f6a6176612d312e504e47)
+    <img width="663" alt="image" src="https://user-images.githubusercontent.com/84627144/177681260-2e998328-77e4-4f5e-8ee9-f6350d1a7e7d.png">
     
     - Map
         - Key와 Value의 형태로 이루어진 데이터 집합
