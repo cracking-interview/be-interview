@@ -621,3 +621,52 @@
     - Atomic 클래스는 CAS(compare-and-swap)를 이용하여 동시성을 하므로 여러 쓰레드에서 데이터를 write해도 문제가 없습니다. synchronized 보다 적은 비용으로 동시성을 보장할 수 있습니다.
         - **CAS 알고리즘이란 현재 스레드가 존재하는 CPU의 CacheMemory와 MainMemory에 저장된 값을 비교하여, 일치하는 경우 새로운 값으로 교체하고, 일치하지 않을 경우 기존 교체가 실패되고, 이에 대해 계속 재시도하는 방식입니다.**
         - **CPU가 MainMemory의 자원을 CPU Cache Memory로 가져와 연산을 수행하는 동안 다른 스레드에서 연산이 수행되어 MainMemory의 자원 값이 바뀌었을 경우 기존 연산을 실패처리하고, 새로 바뀐 MainMemory 값으로 재수행하는 방식입니다.**
+
+- 48. Synchronized와 Lock & Condition 동기화
+    
+    **Synchronized**
+    
+    - synchronized method
+        - 인스턴스 단위 lock
+        - 동일한 인스턴스 내 synchronized 키워드가 적용된 메서드끼리 lock을 공유
+    - synchronized block
+        - this를 명시하면 synchronized method와 동일하게 동작하면서 synchronized method와 lock을 공유
+        - 특정 객체를 명시하면 해당 객체에만 특정 lock을 걸면서 **해당 객체에 lock을 거는 block끼리만** lock을 공유
+        - .class 형식 명시하면 해당 클래스에만 특정 lock을 걸면서 **해당 클래스에 lock을 거는 block끼리만** lock을 공유
+    - static synchronized method
+        - 클래스 단위 lock
+        - static synchronized와 synchronized가 혼용되어있을 때 각자의 lock으로 관리
+    - static synchronized block
+        - 클래스 단위 lock
+        - block의 인자로 정적 인스턴스나 클래스만 사용
+    - **synchornized는 Thread의 동기화 순서를 보장하지 않는다.**
+    
+    **Lock & Condition**
+    
+    - synchronized는 블록 구조를 사용하여 메서드안에 임계영역의 시작과 끝이 있고 알아서 lock을 회수해주는 반면에 Lock은 lock, unlock 메서드로 시작과 끝을 명시하기 때문에 명확하고 임계 영역을 여러 메서드에서 나눠서 작성할 수 있습니다.
+    - concurrent.locks 패키지는 내부적으로 synchronized를 사용하여 구현되어 있지만 더욱 유연하고 세밀하게 처리하기 위해 사용됩니다.
+    - **Lock** : 공유 자원에 한 번에 한 쓰레드만 read, write가 수행 가능하도록 제공하는 인터페이스
+        - **ReentrantLock** : Lock의 구현체로 임계 영역의 시작과 종료 지점을 직접 명시할 수 있습니다.
+    - **ReadWriteLock** : 공유 자원에 여러 개의 스레드가 read 가능하고, write는 한 스레드만 가능한 인터페이스로 읽기를 위한 lock과 쓰기를 위한 lock을 별도로 제공합니다.
+        - **ReentrantReadWriteLock** : ReadWriteLock의 구현체
+    - StampedLock
+        - **ReentrantReadWriteLock에 낙관적인 lock기능을 추가한 것입니다.**
+        - lock을 걸거나 해지할 때 스탬프(long 타입의 정수)를 사용하여 읽기와 쓰기를 위한 lock외에 낙관적인 lock이 추가된 것입니다.
+        - **무조건 읽기 lock을 걸지 않고, 쓰기와 읽기가 충돌할 때만 쓰기가 끝난 후에 읽기 lock을 겁니다.**
+
+- 49. Atomic 동기화
+    - 가시성 문제
+        
+        하나의 스레드에서 공유 자원(변수, 객체 등)을 수정한 결과가 다른 스레드에게 보이지 않을 경우 발생하는 문제
+        
+    - 동시 접근 문제
+        
+        여러 스레드에서 공유자원(변수, 객체 등)을 동시에 접근하였을 때, 연산이 가장 늦게 끝난 결과값으로 덮어씌워지는 문제입니다.
+        
+    - Atomic[Long]
+        - [Long] 자료형을 갖고 있는 Wrapping 클래스입니다.
+        - Thread-safe로 구현되어 멀티쓰레드에서 synchronized 없이 사용할 수 있습니다.
+        - synchronized 보다 적은 비용으로 동시성을 보장할 수 있습니다.
+    - AtomicReference
+        - AtomicReference는 V 클래스(Generic)의 객체를 wrapping 클래스입니다.
+        - AtomicReference 클래스는 멀티쓰레드 환경에서 동시성을 보장합니다.
