@@ -203,7 +203,7 @@
         
 - 17. 서블릿
     
-    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0189f37f-9851-4bb3-8d14-a51c0406dd26/Untitled.png)
+    <img width="682" alt="image" src="https://user-images.githubusercontent.com/84627144/179007403-0dace32f-699c-4d96-a133-de25dad49050.png">
     
     - 서블릿은 WAS 안에서 **동적인 페이지를 만드는데 사용되는 서버 프로그램**
     - 서블릿 전에는 요청이 들어오면 HTTP 요청 메시지를 파싱하는 것부터 여러 부가 작업을 개발자가 수행해야 했지만, 서블릿이 나오면서 부가적인 작업을 대신해주게 되었고, 개발자는 실직적인 메인 로직에만 집중 할 수 있게 되었다.
@@ -219,7 +219,7 @@
     
     - **요청 시 동작 과정**
         
-        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9edae7fd-f33e-4d8a-a621-eb0a0a7cae43/Untitled.png)
+        <img width="695" alt="image" src="https://user-images.githubusercontent.com/84627144/179007441-6a2cec7d-27ed-4739-8057-dbd5a6330013.png">
         
         1. 사용자가 URL을 클릭하면 HTTP Request를 Servlet Container로 보낸다.
         2. **Servlet Container는 쓰레드 풀에서 쓰레드를 꺼내 할당** 해주고 HttpServletRequest, HttpServletResponse 두 객체를 생성한다.
@@ -239,9 +239,7 @@
 - 20. MVC 패턴
     - 그림
         
-        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/eaabbb1c-8d65-4840-a903-8ec9b096b3d3/Untitled.png)
-        
-        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f6374dec-3b1c-4248-a36c-ed47d5947fac/Untitled.png)
+        <img width="641" alt="image" src="https://user-images.githubusercontent.com/84627144/179007551-0539f686-50c8-4fff-925a-b243caf6ba4a.png">
         
     1. 핸들러 조회
         - 핸들러 매핑을 통해 요청 URL에 매핑된 핸들러(컨트롤러)를 조회한다.
