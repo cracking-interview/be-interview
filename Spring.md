@@ -192,7 +192,7 @@
 - 16. 웹 서버(Web Server)와 웹 애플리케이션 서버(WAS)
     
     
-    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f7be4c65-6056-4e14-8aa3-a3cb554dc59b/Untitled.png)
+    <img width="682" alt="image" src="https://user-images.githubusercontent.com/84627144/179007403-0dace32f-699c-4d96-a133-de25dad49050.png">
     
     - 웹 서버
         - 정적 리소스 파일을 제공하는 서버
@@ -203,7 +203,7 @@
         
 - 17. 서블릿
     
-    <img width="682" alt="image" src="https://user-images.githubusercontent.com/84627144/179007403-0dace32f-699c-4d96-a133-de25dad49050.png">
+    <img width="695" alt="image" src="https://user-images.githubusercontent.com/84627144/179007441-6a2cec7d-27ed-4739-8057-dbd5a6330013.png">
     
     - 서블릿은 WAS 안에서 **동적인 페이지를 만드는데 사용되는 서버 프로그램**
     - 서블릿 전에는 요청이 들어오면 HTTP 요청 메시지를 파싱하는 것부터 여러 부가 작업을 개발자가 수행해야 했지만, 서블릿이 나오면서 부가적인 작업을 대신해주게 되었고, 개발자는 실직적인 메인 로직에만 집중 할 수 있게 되었다.
@@ -219,7 +219,7 @@
     
     - **요청 시 동작 과정**
         
-        <img width="695" alt="image" src="https://user-images.githubusercontent.com/84627144/179007441-6a2cec7d-27ed-4739-8057-dbd5a6330013.png">
+        <img width="641" alt="image" src="https://user-images.githubusercontent.com/84627144/179007551-0539f686-50c8-4fff-925a-b243caf6ba4a.png">
         
         1. 사용자가 URL을 클릭하면 HTTP Request를 Servlet Container로 보낸다.
         2. **Servlet Container는 쓰레드 풀에서 쓰레드를 꺼내 할당** 해주고 HttpServletRequest, HttpServletResponse 두 객체를 생성한다.
@@ -239,7 +239,7 @@
 - 20. MVC 패턴
     - 그림
         
-        <img width="641" alt="image" src="https://user-images.githubusercontent.com/84627144/179007551-0539f686-50c8-4fff-925a-b243caf6ba4a.png">
+    <img width="669" alt="image" src="https://user-images.githubusercontent.com/84627144/179007853-ccf0a696-f14c-4525-9341-9a574063df19.png">
         
     1. 핸들러 조회
         - 핸들러 매핑을 통해 요청 URL에 매핑된 핸들러(컨트롤러)를 조회한다.
