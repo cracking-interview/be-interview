@@ -232,7 +232,7 @@
 - 19. MVC 패턴
     - 그림
         
-        <img width="669" alt="image" src="https://user-images.githubusercontent.com/84627144/179007853-ccf0a696-f14c-4525-9341-9a574063df19.png">
+    <img width="669" alt="image" src="https://user-images.githubusercontent.com/84627144/179007853-ccf0a696-f14c-4525-9341-9a574063df19.png">
         
     1. 핸들러 조회
         - 핸들러 매핑을 통해 요청 URL에 매핑된 핸들러(컨트롤러)를 조회한다.
@@ -337,7 +337,8 @@
     
 - 26. Filter
     
-<img width="662" alt="image" src="https://user-images.githubusercontent.com/84627144/179441328-161dfdba-6471-4926-9b97-01915d9b4993.png">    
+    <img width="662" alt="image" src="https://user-images.githubusercontent.com/84627144/179441328-161dfdba-6471-4926-9b97-01915d9b4993.png">   
+    
     - **Dispatcher Servlet에 요청이 전달되기 전/후에 url 패턴에 맞는 모든 요청에 대해 부가작업을 처리하는 기능을 제공하는 것**
     - **톰캣과 같은 웹 컨테이너(웹 애플리케이션 WAS 단)에서 동작**하기 때문에 Spring과 무관한 자원에 대해 동작
     - Spring Context 외부에서 동작하므로 **ErrorController** 에서 예외 처리
@@ -353,7 +354,8 @@
     - 참고로 필터를 추가하기 위해서는 javax.servlet의 Filter 인터페이스를 구현하면 된다.
 - 27. Interceptor
     
-<img width="662" alt="image" src="https://user-images.githubusercontent.com/84627144/179441328-161dfdba-6471-4926-9b97-01915d9b4993.png">    
+    <img width="662" alt="image" src="https://user-images.githubusercontent.com/84627144/179441328-161dfdba-6471-4926-9b97-01915d9b4993.png">    
+
     - **Spring이 제공하는 기술로, Dispatcher Servlet이 컨트롤러를 호출하기 전과 후에 요청과 응답을 참조하거나 가공할 수 있는 기능을 제공하는 것**
     - **스프링 컨텍스트에서 동작**
     - Spring Context 내부에서 동작하므로 **@ControllerAdvice** 을 사용하여 예외 처리
@@ -368,7 +370,7 @@
     - 참고로 인터셉터를 추가하기 위해서는 org.springframework.web.servlet의 HandlerInterceptor 인터페이스를 구현하면 된다.
 - 28. Filter, Interceptor의 실행 과정, 차이
     
-<img width="662" alt="image" src="https://user-images.githubusercontent.com/84627144/179441328-161dfdba-6471-4926-9b97-01915d9b4993.png">
+    <img width="662" alt="image" src="https://user-images.githubusercontent.com/84627144/179441328-161dfdba-6471-4926-9b97-01915d9b4993.png">
 
     ### **실행 과정**
     
@@ -389,7 +391,8 @@
     - 인터셉터는 Conotroller 앞에서 동작하고 AOP는 Service 앞에서 동작한다.
 - 30. 레이어드 아키텍처
     
-<img width="668" alt="image" src="https://user-images.githubusercontent.com/84627144/179441350-a5546caf-1700-4c39-b841-62f3e46796ba.png">    
+    <img width="668" alt="image" src="https://user-images.githubusercontent.com/84627144/179441350-a5546caf-1700-4c39-b841-62f3e46796ba.png">    
+
     - Spring은 레이어드 아키텍처로 이루어져있다. 하나의 레이어는 자신의 고유 역할을 수행하고, 인접한 다른 레이어에 무언가를 요청하거나 응답한다.
     - 그밖의 다른 레이어는 신경 쓸 필요가 없기 때문에 각 레이어는 자신의 역할에 충실할 수 있다.
     - 따라서 시스템 전체를 수정하지 않고 특정한 레이어의 기능을 개선하거나 교체할 수 있기 때문에 재사용성이 좋고 유지 보수하기에도 유리하다. 또한, 레이어별로 테스트 구현이 편해지고 코드 가독성도 높아진다.
@@ -400,6 +403,7 @@
         - Service 객체라는 것은 하나의 트랜잭션으로 구성되어 작동
     - Persistence Layer
         - 데이터 관련 처리를 담당하는 부분
+        
 - 31. OSIV
     
     OSIV는 Open Session In View의 약자로 **영속성 컨텍스트를 뷰단까지 열어준다** 는 뜻이다.스프링의 OSIV는 프레센테이션 계층에는 트랜잭션이 없기 때문에 엔티티를 수정할 수 없지만 영속성 컨텍스트가 살아있기 때문에 지연로딩이 가능합니다.
