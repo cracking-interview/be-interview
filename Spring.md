@@ -453,6 +453,178 @@
         }
     }
     ```
+- 33. DataSource
+    - JDBC를 사용해 DB에 접근할 때마다 Connection을 열고 끊고를 반복 사용해야 하는데, 이 반복을 줄이기 위해 DataSource가 미리 Connection을 생성한다.
+        
+        이 Connection을 모아둔 곳이 Connection Pool이고, 이 Connection Pool을 사용하기 위한 인터페이스가 DataSource다. 
+        
+    - 즉, DB와 연결을 해주고, 스프링은 DataSource를 통해 DB와의 Connection을 획득한다.
+    
+    ---
+    
+    - 커넥션 관련 기술이 여러 개 등장하면서 코드레벨에서는 서로 다르지만 논리적으로는 커넥션을 획득하는 역할을 하기 때문에 이를 추상화 시킨 것이 DataSource이다.
+    - 실질적인 로직은 DataSource에 의존하도록 하고 구현 기술이 바뀔때 마다 DataSource의 구현체만 바꾸면 되므로 재사용성과 확장성을 높일 수 있다.
+    - 커넥션 관련 기술은 커넥션을 계속 신규 생성하는 DriverManager, DBCP2 커넥션 풀, HikariCP 커넥션 풀 등이 있다.
+    - DriverManager는 DataSource를 구현하지 않아서 스프링에서 DriverManagerDataSource라는 구현 클래스를 제공한다.
+- 34. 트랜잭션을 추상화하는 이유
+    - 트랜잭션 : 데이터베이스의 상태를 변화시키기 해서 수행하는 작업의 단위
+    - 다양한 데이터 접근 기술이 등장하면서 코드레벨에서는 서로 다르지만 논리적으로는 같은 기능을 수행하기 때문에 트랜잭션을 추상화했다.
+    - 스프링 트랜잭션 추상화 클래스는 **PlatformTransactionManager**이다. 보통 **트랜잭션 매니저**라고 부른다.
+    - JDBC, JPA, 하이버네이트 등이 있다.
+- 35. 트랜잭션 동기화 매니저
+    - **하나의 트랜잭션에서 같은 커넥션을 사용하도록 도움을 주는 기능을 제공한다.**
+    
+    과정은 다음과 같다.
+    
+    1. 서비스단에서 트랜잭션이 시작하면 트랜잭션 매니저가 커넥션을 생성하고(풀을 사용하면 풀에서 가져오고) autoCommit을 false로 세팅한 뒤 트랜잭션 동기화 매니저의 스레드 로컬에 커넥션을 보관한다.
+    2. 이후 리포지토리 계층에서는 트랜잭션 동기화 매니저의 스레드 로컬에서 해당 커넥션을 가져와서 사용한다.
+    3. 서비스 단에서 트랜잭션을 종료할 때는 트랜잭션 동기화 매니저에서 해당 커넥션을 가져와 커밋 또는 롤백을 수행하고 리소스를 정리하고 커넥션을 커넥션 풀에 반환한다.
+- 36. 선언적 트랜잭션 vs 프로그래밍 방식 트랜잭션
+    - 선언적 트랜잭션은 @Transactional을 의미한다.
+    - 프로그래밍 방식 트랜잭션은 트랜잭션 매니저나 트랜잭션 템플릿 등을 직접 사용해서 프로그래밍 코드를 작성하는 방식이다.
+    - @Transactional을 사용하면 프록시(메서드 오버라이딩 개념)를 사용하기 때문에 추가적인 코드를 작성할 필요 없이 간편하게 사용할 수 있으므로 대부분 선언적 트랜잭션을 사용한다.
+- 37. `@Transactional`
+    
+    @Transactional AOP로 구성되어 있다.즉, 프록시로 동작하므로 오버라이딩 개념으로 동작한다. 메서드에 @Transactional을 붙이면 해당 클래스가 빈으로 등록될 때 @Transactional이 붙은 메서드만 트랜잭션 처리되는 메서드로 오버라이딩 한 프록시 객체가 빈으로 등록된다.
+    
+    **클래스에 붙으면 클래스의 전체 public 메서드에 트랜잭션 처리가 된 프록시가 빈으로 등록된다. public이 아닌 다른 접근제한자가 붙은 메서드의 경우는 트랜잭션 처리가 되지 않는데 이유는 프록시가 오버라이딩 개념이기 때문에 public으로 열려있지 않고 private 메서드 같은 경우에는 적용이 불가능하다.**
+    
+    ### **내부 호출 문제**
+    
+    @Transactional이 붙은 클래스는 프록시로 빈으로 등록된다.따라서 주입받은 객체를 사용할 경우 프록시가 들어오게 되고 접근 시 프록시 객체를 통한 호출이 이뤄진다.
+    
+    ```java
+    public class UserService {
+    
+        @Transactional
+        public void createUserListWithTrans(){
+            for (int i = 0; i < 10; i++) {
+                createUser(i);
+            }
+    
+            throw new RuntimeException();
+        }
+    
+        @Transactional
+        public User createUser(int index){
+            User user = User.builder()
+                    .name("testname::"+index)
+                    .email("testemail::"+index)
+                    .build();
+    
+            userRepository.save(user);
+            return user;
+        }
+    }
+    ```
+    
+    createUserListWithTrans에서 createUser를 호출한다.둘다 @Transactional이 붙어있다.서로 트랜잭션이 붙어있기에 createUser에서 save 처리를 했으므로 예외가 발생하더라도 다 저장되었을 것이라고 생각할 수 있지만 틀렸다.이유는 트랜잭션이 붙은 상태로 동작하려면 프록시를 통해 접근해야 하는데 위는 실제 코드 자체를 호출한 것이기 때문이다.즉, 프록시를 사용하려면 userService.XXX 형식으로 호출해야된다는 뜻이다.따라서 createUserListWithTrans를 호출할 경우 아래와 프록시 객체로 동작한다.
+    
+    ```java
+    public void createUserListWithTrans(){
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+    
+        super.createUserListWithTrans();
+    
+        tx.commit();
+    }
+    ```
+    
+    createUserListWithTrans에 붙은 @Transactional만 동작하게 된다.즉, 하나의 트랜잭션 안에서 동작하게 되는 것이다.만약 트랜잭션이 붙은 프록시를 호출해서 사용하다가 다른 트랜잭션이 붙은 프록시 클래스를 호출할 경우 이때부터는 트랜잭션 전파 속성에 따라 트랜잭션이 동작한다.
+    
+    앞서 다 설명했지만 한번 더 집고 넘어가자.진입점에 Trasactional이 없고 안에서 호출되는 메서드에만 Transactional이 있는 경우다.
+    
+    ```java
+    public class UserService {
+    
+        public void createUserListWithTrans(){
+            for (int i = 0; i < 10; i++) {
+                createUser(i);
+            }
+    
+            throw new RuntimeException();
+        }
+    
+        @Transactional
+        public User createUser(int index){
+            User user = User.builder()
+                    .name("testname::"+index)
+                    .email("testemail::"+index)
+                    .build();
+    
+            userRepository.save(user);
+            return user;
+        }
+    }
+    
+    // AopApplication.java
+    userService.createUserListWithoutTrans();
+    ```
+    
+    Userservice는 createUser에 붙은 @Transactional 때문에 프록시가 빈으로 등록된다.userService는 프록시이지만 createUserListWithTrans는 트랜잭션이 붙어있지 않으므로 트랜잭션이 처리되지 않는 것을 호출하게 되고 내부적으로 createUser을 호출하게 되어 트랜잭션 없이 호출하게 된다.실행결과를 보면 user가 10개 생성되게 되는데 이는 @Transactional이 없기 때문에 createUser가 각각 insert하면서 DB의 기본 설정대로 auto commit이 true로 인한 동작 결과이다.(@Transactional은 auto commit을 false로 하고 마지막에 commit한다.)
+    
+- 38. Propagation 전파단계
+    
+    트랜잭션 전파란 **트랜잭션의 경계에서 이미 트랜잭션이 진행 중인 트랜잭션이 있을 때 어떻게 동작할지를 결정하는 것**입니다.
+    
+    ![https://backtony.github.io/assets/img/post/interview/transaction-7.PNG](https://backtony.github.io/assets/img/post/interview/transaction-7.PNG)
+    
+- 39. ORM(Object Relational Mapping)
+    - 객체지향 코드와 데이터 중심 데이터베이스의 패러다임 불일치를 해결하기 위해 나온 기술
+    - 객체와 관계형 데이터베이스를 맵핑하는 기술
+    - 예시
+        - JDBC API
+            - JAVA 진영 Database 연결 표준 인터페이스
+        - Spring JDBC
+            - template을 통해 데이터를 꺼내면서 한단계 더 추상화
+        - MyBatis
+            - SQL 분리를 목적으로 XML로 관리하는 방식
+        - JPA
+            - 자바 ORM의 표준 API 명세를 JPA 인터페이스라고 한다.
+        - Hibernate
+            - JPA 인터페이스의 구현체
+        - Spring Data JPA
+            - JPA에 Repository를 추가하여 한단계 더 추상화한 것
+- 40. 영속성 컨텍스트
+    
+    영속성 컨텍스트란 **엔티티를 영구 저장하는 환경을 의미** 한다.
+    
+    - 생명 주기
+        - 영속 : 영속성 컨텍스트에 저장된 상태
+        - 준영속 : 영속성 컨텍스트에 저장되었다가 분리된 상태,
+        - 비영속 : 영속성 컨텍스트와 전혀 관계없는 상태
+        - 삭제 : 삭제된 상태
+    
+    ### **영속성 컨텍스트의 이점**
+    
+    - 1차 캐시 : 조회가 가능하며 1차 캐시에 없으면 DB에서 조회하여 1차 캐시로 가져온다.
+    - 동일성 보장 : == 비교가 가능하다.
+    - 쓰기 지연 : 트랜잭션 커밋 전까지 SQL을 바로 보내지 않고 모아서 보낼 수 있다.
+    - 변경 감지(더티 체킹) : 1차 캐시에 들어온 데이터를 스냅샷 찍어두고 커밋시점에 비교하여 update SQL을 생성한다.
+    - 지연 로딩 : 엔티티 안에서 엔티티를 불러올 때 사용 시점에 쿼리를 날려 가져올 수 있다.
+- 41. N + 1 문제
+    - 연관 관계가 설정된 엔티티를 조회할 경우에 조회된 데이터 갯수(n) 만큼 연관관계의 조회 쿼리가 추가로 발생하여 데이터를 읽어오게 된다.
+    - 하위 엔티티들을 첫 쿼리 실행시 한번에 가져오지 않고, Lazy Loading으로 필요한 곳에서 사용되어 쿼리가 실행 될때 발생하는 문제가 N+1 쿼리 문제입니다.
+    - 예시
+        - 학생(N)과 팀(1)에서 양방향관계를 갖고 DB에서 팀을 10개를 꺼낸다고 가정해보자.
+        - 첫 쿼리는 팀 10개를 꺼내는 쿼리가 하나의 쿼리가 나가게 되고 이때, 팀 기준 OneToMany이므로 Lazy로 동작하여 학생은 프록시로 들어오게 된다.
+        - 즉, 10개의 쿼리가 더 나가게된다.
+        - 그래서 1개의 쿼리가 나가고 이후에 N개의 쿼리가 더 나간다고 해서 N+1 문제라고 한다.
+        - 이에 대한 해결책은 Fetch Join과 Batch Size가 있다.Fetch Join을 사용하면 Lazy로딩으로 프록시로 들어오던 것을 join으로 한 번에 땡겨올 수 있다.
+        - Batch Size는 N+1문제가 발생하던 것 처럼 프록시로 가져오고 학생들 가져오게 될 때 쿼리가 한번 더 나가게 되는데 이때 in쿼리로 Batch size 개수만큼 가져온다.
+        - 가져온 팀이 10개이고 Batch size가 5라면, 최초에 학생을 가져오는 쿼리에서 where 조건문 in 쿼리로 5개의 team id값을 넣어서 쿼리를 날린다.
+        - 이렇게 되면 결과적으로 학생을 가져오는 쿼리는 2번 나가게 되어 총 쿼리는 3(팀 가져오는 쿼리 + 학생 가져오는 쿼리)개의 쿼리가 나가게 된다.
+        - 참고로 @EntityGraph를 사용해도 Fetch join으로 가져올 수 있다.
+- 42. fetch join 문제
+    - Fetch Join은 SQL 조인 종류가 아니다. 지연로딩을 하지 않고 즉시 로딩(EAGER)로 가져오는 쿼리이다. 즉, Fetch Join의 목적은 관계 있는 Entity를 한 방에 가져오는데 그 목적이 있다.
+    - fetch join 대상에는 별칭(alias)을 줄 수 없다.
+        - 하이버네이트는 허용하지만 가급적이면 사용하지 않는게 좋다.
+        - fetch join은 나의 연관된 것들을 다 끌고오겠다는 의미로 설계된 것이기 때문에 대상을 where문과 on에서 사용하게 되면 필터링이 되므로 의도된 설계와 맞지 않는다.
+    - **둘 이상의 컬렉션은 fetch join 할 수 없다.**
+        - 둘 이상 컬렉션과 진행시 카테시안 곱이 되어 정합성이 맞지 않는다.
+    - OneToMany의 경우 페이징 쿼리 성능 이슈
+
 
 # 🧚 Spring 에서 사용되는 디자인 패턴
 
