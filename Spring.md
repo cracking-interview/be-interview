@@ -625,6 +625,133 @@
         - 둘 이상 컬렉션과 진행시 카테시안 곱이 되어 정합성이 맞지 않는다.
     - OneToMany의 경우 페이징 쿼리 성능 이슈
 
+- 43. OneToMany fetch join 페이징 쿼리 성능 이슈
+    - ManyToOne의 경우 애초에 Many에 One을 끼워넣기 때문에 최대 Many의 데이터 개수만큼만 조회된다.
+    - 반면에 OneToMany의 경우 One에 Many를 끼워넣기 때문에 기존 One의 개수 만큼의 데이터가 아니라 더 많은 데이터가 조회된다.
+    - OneToMany에서 페이징 쿼리를 날리고 싶다면 batch size를 사용해야 한다.
+    - 페이징 쿼리를 사용하지 않고 OneToMany를 사용할 경우에는 distinct를 명시하면 된다.
+    - DB단에서는 당연히 행 데이터가 서로 다르기 때문에 distinct가 동작하지 않지만 애플리케이션 단으로 데이터가 넘어오면 JPA에서 distinct로 식별자가 같은 것을 걸러서 컬렉션으로 꽂아주는 기능을 제공해준다.
+- 44. MultipleBagFetchException
+    - XXToOne과 같이 단일 관계의 자식 테이블에는 Fetch Join 여러 번 사용해도 된다.
+    - 하지만 XXToMany의 경우 2개 이상의 OneToMany 자식 테이블에 Fetch Join을 선언했을때 MultipleBagFetchException이 발생한다.
+    - 2개 이상의 컬렉션을 Fetch join으로 땡겨 오면 데이터 정합성 문제가 발생한다.
+    - 해결책은 Batch Size를 이용하는 것이다.
+    - 자주 사용하는 컬렉션 쪽에는 Fetch join을 걸어주고, 나머지는 Lazy Loading으로 땡겨온다.
+    - Lazy Loading으로 인해 프록시로 땡겨온 부분을 접근할 때 Batch Size로 인해 in쿼리로 땡겨오는 식으로 해결해야 한다.
+- 45. OneToOne 양방향 관계 Lazy 로딩 주의
+    - OneToOne 양방향 관계에서는 연관관계 주인이 호출할 때는 Lazy가 동작하지만, 주인이 아닌 곳에서 호출하게 되면 Lazy가 먹히지 않는다.
+    - 이유는 프록시는 null을 감쌀 수 없기 때문에 프록시의 한계로 나타나는 문제이다.
+    - User과 Cart가 일대일 양방향관계이고 연관관계 주인은 User라고 가정해보자.Cart 테이블을 보면 Cart는 User_Id 값을 알지 못한다.
+    - 알기 위해서는 User 테이블을 조회해야하는데 이렇게 되면 User 테이블을 조회해야하기 때문에 Lazy의 의미가 없어진다. 그래서 Lazy로 설정해도 Eager로 동작하는 것이다.
+    
+    [https://camo.githubusercontent.com/22f63ef8e9a67691cd2e3dbb98f39ad10f471e8add7a44c87573c9a6e098216f/68747470733a2f2f6261636b746f6e792e6769746875622e696f2f6173736574732f696d672f706f73742f696e746572766965772f737072696e672d342e504e47](https://camo.githubusercontent.com/22f63ef8e9a67691cd2e3dbb98f39ad10f471e8add7a44c87573c9a6e098216f/68747470733a2f2f6261636b746f6e792e6769746875622e696f2f6173736574732f696d672f706f73742f696e746572766965772f737072696e672d342e504e47)
+    
+    - 그렇다면 OneToMany의 경우에도 마찬가지가 아닐까 라고 생각할 수 있지만 OneToMany는 Lazy가 정상 동작한다.
+    - 이유는 컬렉션의 경우는 비어있다고 isEmpty로 표현이 가능하지만, OneToOne은 없다면 Null값이 들어가기 때문이다.
+- 46. 상속관계 매핑
+    - 상속관계 매핑
+        - 객체간의 상속관계를 DB에 적용시키기 위한 작업
+        - 부모 클래스에 **@Inheritance** 애노테이션 붙여서 상속관계 명시
+        - JOINED 전략이 제일 합리적, 매우 간단하면 SINGLE_TABLE 전략 사용
+        - 부모, 자식 클래스 모두 @Entity
+        - 전략에 따라 부모테이블이 생성될 수도, 안될 수도 있다.
+    - **@MappedSuperclass**
+        - 객체끼리 **공통되는 속성(프로퍼티)** 를 뽑아서 만든 클래스(BaseEntity 처럼 시간 뽑을 때)
+        - Item을 부모로 book, album 같이 포함되는 상속관계가 아니라 createDate같이 객체끼리 공통되는 필드가 겹칠 때 사용
+        - 자바에서는 상속으로 사용하나 상속관계 매핑과 다르게 **엔티티가 아니라 DB상에 올라가지 않음**
+    - 임베디드 타입
+        - MappedSuperclass와 유사하게 공통되는 속성을 뽑아서 만든 클래스로 @Embeddable 애노테이션을 붙인다.
+        - 사용하는 곳에서는 상속이 아니라 필드로 선언하고 위에 @Embedded 애노테이션을 붙이다.
+        - 테이블로 올라가지 않는다.
+    
+    MappedSuperclass와 임베디드 타입은 거의 똑같다고 보면 되는데 임베디드 타입은 위임이고, MappedSuperclass는 상속이다.보통 상속보다는 위임이 좋기 때문에 위임을 선택하지만 편의상 경우에 따라 상속이 좋은 선택이 될 수도 있다.
+    
+    ```sql
+    -- 임베디드 타입
+    select m from Member m where m.traceDate.createdDate > ?
+    
+    -- 상속
+    select m from Member m where m.createdDate > ?
+    ```
+    
+    위임의 경우 한 번 더 접근해야하는데 상속은 바로 접근할 수 있다.**또한 임베디드 타입은 서로 다른 엔티티가 공유하게 되면 SideEffect가 발생할 수 있다.(한 쪽에서 고치면 다른쪽에서도 바뀐다.)**
+    
+- 47. QueryDsl을 사용하는 이유
+    - QueryDsl을 사용하면 **컴파일 타임에 오류를 잡을 수 있고**, 동적 쿼리를 쉽게 작성할 수 있다.
+    - 원하는 필드만 뽑아서 DTO로 만드는 기능도 지원한다.
+    - where 조건절을 함수로 추상화하여 재활용할 수 있다.
+- 48. Spring Batch
+    
+    단발성으로 대용량 데이터를 처리하는 애플리케이션을 배치 애플리케이션이라고 하고 스프링 진영에는 스프링 배치가 있다.스프링 배치는 레이저 구조 3개로 구분된다.
+    
+    - 애플리케이션 레이어
+        - 개발자가 작성한 모든 배치 작업과 사용자 정의 코드를 포함한다.
+    - 코어 레이어
+        - 배치 작업을 시작하고 제어하는데 필요한 핵심 런타임 클래스들을 포함(jobLauncher, job, step, flow 등)한다.
+    - 인프라 레이어
+        - 잡을 실행의 흐름과 처리를 위한 틀을 제공
+        - 애플리케이션과 코어 모두 인프라 위에서 빌드된다.
+- 49. 청크기반 방식
+    - itemReader, itemProcessor, itemWriter로 구성된다.
+        - itemReader
+            - Custor 기반 처리
+                - 데이터를 호출하면 다음 커서로 이동하는 스트리밍 방식으로 데이터를 한 건씩 처리
+                - 모든 결과를 메모리에 할당하기 때문에 메모리 사용량 증가
+                - 모든 데이터를 처리할 때까지 커넥션 유지
+                - 멀티스레드 환경에서 동시성 이슈 발생하므로 동기화 처리가 필요
+            - 페이징 기반 처리
+                - 페이지 사이즈 만큼 데이터를 한 번에 처리
+                - 페이지 사이즈 만큼 커넥션을 맺고 끊음
+                - 페이징 결과만 메모리에 할당
+                - 멀티 스레드 환경에서 스레드 안정성을 보장하기에 별도 동기화 처리 불필요
+            - **페이지 사이즈와 청크 사이즈를 일치시켜야 하는 이유**
+                - 청크 사이즈가 50이고 페이지 사이즈가 10이면 5번의 read가 발생하면서 한 번의 트랜잭션 처리를 위해서 5번의 조회 쿼리를 날리는 성능 이슈가 발생할 수 있다.
+                - JPA를 사용하는 경우 영속성 컨텍스트가 깨지는 문제가 발생한다. JpaPagingItemReader의 경우 페이지를 읽을때, 이전 트랜잭션을 flush, clear로 초기화 시켜버린다. 그러다 보니 마지막에 읽은 페이지를 제외한 이전에 조회한 결과들의 트랜잭션 세션이 전부 종료되어 버리면서 processor에서 Lazy 로딩이 불가능하게 되는 현상이 발생한다.
+        - itemWriter
+            - jpaItemWriter
+                - JPA 엔티티 기반으로 데이터를 처리하고 엔티티를 하나씩 insert한다.
+            - JdbcBatchItemWriter
+                - Jpa처럼 단건 처리가 아닌 일괄 bulk insert 처리한다.
+            - **ChunkSize 만큼 데이터를 커밋하기 때문에 Chunk size가 곧 Commit Interval(커밋 간격)이 된다.**
+    - chunkSize 만큼 데이터를 한 번에 처리하고 다음 chunkSize는 새로운 트랜잭션으로 동작한다.
+    - repeat, retry, skip을 통해서 반복 및 오류 제어를 할 수 있다.
+- 50. HibernateItemReader vs JpaPageReader
+    - 일반적인 경우에는 차이가 없으나 2개 이상의 컬렉션을 땡겨와야 하는 경우 차이가 발생한다.
+    - 2개 이상의 컬렉션을 땡겨오는 경우 MultipleBagFetchException을 피하기 위해 fetch join을 먹이고 다른 쪽에는 batchSize 옵션을 먹이게 된다.
+    - 다른 PagingItemReader의 경우 문제가 없으나 JpaPagingItemReader의 경우만 batchSize 옵션이 적용되지 않는다.
+    - 이유는 다른 PagingItemReader는 트랜잭션을 Chunk에 맡기지만 JpaPagingItemReader의 경우 트랜잭션이 doReadPage 메서드 안에서 읽기에 관한 트랜잭션을 먼저 처리해버리기 때문이다.
+    - doReadPage 메서드를 까보면 트랜잭션을 가져와서 flush, clear 해버리고 데이터를 읽어온 뒤 마지막에 트랜잭션 커밋을 해버리면서 데이터를 읽은 트랜잭션이 종료되버린다.
+    - processor 부분에서 지연 로딩의 N+1문제를 막기 위해서 BatchSize 옵션을 걸어버린 것인데 processor에 오기 전에 해당 트랜잭션이 종료되어 버리므로 processor에서는 batchSize 옵션이 적용되지 않고 N+1 문제가 발생해버린다.
+    - **정리하면, 일반적인 경우에는 상관 없으나 컬렉션 2개 이상의 조인을 해야하는 경우 JpaPagingItemReader의 N+1 이슈가 있으니 잘 알고 사용해야 한다.**
+- 51. MSA vs Monolithic
+    - MSA
+        - 장점
+            - 서비스 단위로 개발을 진행하기에 해당 부분을 온전히 이해하기 쉽다.
+            - **새로 추가되는 부분은 빠르게 수정 및 배포가 가능하다.**
+            - 해당 기능에 맞는 기술, 언어 등을 선택하여 사용할 수 있다.
+            - **문제가 생기면 해당 기능에만 문제가 생긴다.**
+        - 단점
+            - **서비스가 분산되어 있어 관리하기 어렵다.**
+            - 통신오류가 잦을 수 있다.
+            - **테스트가 불편하다.**
+    - Monolithic(모놀리식)
+        - 장점
+            - 개발 환경이 같아서 복잡하지 않다.
+            - End-To-End 테스트가 용이하다.(MSA의 경우 필요한 서비스들을 모두 동작시켜야함)
+        - 단점
+            - 프로젝트가 커지면 **빌드, 배포 시간이 오래걸린다.**
+            - 작은 수정사항이 있어도 전체를 다시 빒드하고 배포해야 한다.
+            - 많은 양의 코드가 몰려있어 개발자가 모두를 이해하는데 어렵고 유지보수하기도 어렵다.
+            - **일부분의 오류가 전체에 영향을 미친다.**
+- 52. DDD(Domain Driven Design) 구조
+    - **DDD란 비즈니스 도메인 별로 나눠서 설계하는 방식으로 여러 도메인들이 서로 상호작용하도록 도메인을 중심으로 설계하는 것을 말한다.**
+    - DDD의 핵심 목표는 **모듈간의 의존성을 최소화하고 응집성은 최대화**하는 것이다.
+    - Presentation, application, domain, infrastructure 계층으로 구분되어 있다.
+        - presentation -> application -> domain -> infrastructure
+        - 하위 계층으로만 의존함으로서 구조가 복잡하여 발생할 수 있는 순환참조를 막을 수 있다.
+        - 단방향으로 구성되어있기에 각 계층별 로직을 쉽게 이해할 수 있다.
+        - infrastructure는 domain의 추상화를 구현하는 계층으로 DIP의 활용을 극대화할 수 있다.
+
 
 # 🧚 Spring 에서 사용되는 디자인 패턴
 
