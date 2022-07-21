@@ -631,7 +631,7 @@
         - block의 인자로 정적 인스턴스나 클래스만 사용
     - **synchronized는 Thread의 동기화 순서를 보장하지 않는다.**
     
-    **Lock & Condition**
+    **Lock**
     
     - synchronized는 블록 구조를 사용하여 메서드안에 임계영역의 시작과 끝이 있고 알아서 lock을 회수해주는 반면에 Lock은 lock, unlock 메서드로 시작과 끝을 명시하기 때문에 명확하고 임계 영역을 여러 메서드에서 나눠서 작성할 수 있습니다.
     - concurrent.locks 패키지는 내부적으로 synchronized를 사용하여 구현되어 있지만 더욱 유연하고 세밀하게 처리하기 위해 사용됩니다.
@@ -643,6 +643,10 @@
         - **ReentrantReadWriteLock에 낙관적인 lock기능을 추가한 것입니다.**
         - lock을 걸거나 해지할 때 스탬프(long 타입의 정수)를 사용하여 읽기와 쓰기를 위한 lock외에 낙관적인 lock이 추가된 것입니다.
         - **무조건 읽기 lock을 걸지 않고, 쓰기와 읽기가 충돌할 때만 쓰기가 끝난 후에 읽기 lock을 겁니다.**
+
+    **Condition 클래스**
+        - 특정 스레드를 위한 Conditon 인스턴스를 만들어 스레드 별로 wai t pool을 만들어주는 기능을 한다.
+        - 이를 이용하여 깨우고 싶은 특정 스레드만 깨우는 것이 가능하다. 
 - 50. Atomic
     - Atomic[Long]
         - [Long] 자료형을 갖고 있는 Wrapping 클래스입니다.
