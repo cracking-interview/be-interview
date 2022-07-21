@@ -690,7 +690,7 @@
 - 49. 청크기반 방식
     - itemReader, itemProcessor, itemWriter로 구성된다.
         - itemReader
-            - Custor 기반 처리
+            - Cursor 기반 처리
                 - 데이터를 호출하면 다음 커서로 이동하는 스트리밍 방식으로 데이터를 한 건씩 처리
                 - 모든 결과를 메모리에 할당하기 때문에 메모리 사용량 증가
                 - 모든 데이터를 처리할 때까지 커넥션 유지
