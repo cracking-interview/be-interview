@@ -655,3 +655,8 @@
     - AtomicReference
         - AtomicReference는 V 클래스(Generic)의 객체를 wrapping 클래스입니다.
         - AtomicReference 클래스는 멀티쓰레드 환경에서 **동시성을 보장**합니다.
+
+- 51. 왜 Vector 를 사용하지 않을까? 
+    - Vector의 모든 get() set() 등의 메서드에 **synchronized**가 붙어있는건 특정 상황에서 성능을 꽤 저하시킬 수 있다.
+    - 단순히 Vector에 Iterator를 붙여 순차적으로 item들을 탐색하기만 해도 원소탐색 시마다 get() 메서드의 실행을 위해 계속 lock을 걸고 닫으므로 Iterator 연산과정 전체에 1번만 걸어주면 될 locking에 쓸데없는 오버헤드가 엄청나게 발생한다.
+    - 상황에 따라 굉장히 비효율적인 연산이 발생함
