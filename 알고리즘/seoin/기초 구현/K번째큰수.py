@@ -1,5 +1,8 @@
-n, k = map(int, input().split())
-a = list(map(int, input().split()))
+import sys
+
+n, k = map(int, sys.stdin.readline().rstrip().split())
+a = list(map(int, sys.stdin.readline().rstrip().split()))
+
 res = set()
 
 for i in range(n):

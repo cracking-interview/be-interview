@@ -1,6 +1,8 @@
 # s~e번째 까지 수를 오름차순 정렬
 # k 번째로 나타나는 수
-T = int(input())
+import sys
+
+T = int(sys.stdin.readline().rstrip())
 
 for t in range(T):
     n, s, e, k = map(int, input().split())

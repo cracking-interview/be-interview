@@ -1,5 +1,7 @@
-n=int(input())
-n_list=list(map(int,input().split()))
+import sys
+
+n = int(sys.stdin.readline().rstrip())
+n_list = list(map(int, sys.stdin.readline().rstrip().split()))
 
 score=0
 count=0

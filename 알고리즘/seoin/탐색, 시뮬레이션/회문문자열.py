@@ -1,11 +1,13 @@
+import sys
+
 # 내 풀이
-n = int(input())
+n = int(sys.stdin.readline().rstrip())
 
 def isPalindrome(word):
     return word == word[::-1]
 
 for i in range(n):
-    a = input().lower()
+    a = sys.stdin.readline().rstrip().lower()
     if isPalindrome(a) == True:
         print("#%d YES" %(i+1))
     else:
@@ -14,9 +16,9 @@ for i in range(n):
 
 
 # 다른 풀이
-n = int(input())
+n = int(sys.stdin.readline().rstrip())
 for i in range(n):
-    s=input()
+    s=sys.stdin.readline().rstrip()
     s=s.upper()
     size=len(s)
 

@@ -1,5 +1,7 @@
-n = int(input())
-a = [list(map(int, input().split())) for _ in range(n)]
+import sys
+
+n = int(sys.stdin.readline().rstrip())
+a = [list(map(int, sys.stdin.readline().rstrip().split())) for _ in range(n)]
 
 # 행, 열
 max_sum = -2149000000

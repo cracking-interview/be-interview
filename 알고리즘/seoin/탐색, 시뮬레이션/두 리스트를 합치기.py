@@ -1,17 +1,19 @@
-n = int(input())
-a = list(map(int, input().split()))
-m = int(input())
-b = list(map(int, input().split()))
+import sys
+
+n = int(sys.stdin.readline().rstrip())
+a = list(map(int, sys.stdin.readline().rstrip().split()))
+m = int(sys.stdin.readline().rstrip())
+b = list(map(int, sys.stdin.readline().rstrip().split()))
 
 c = a + b
 c.sort()
 print(c)
 
 # 예시 코드
-n = int(input())
-a = list(map(int, input().split()))
-m = int(input())
-b = list(map(int, input().split()))
+n = int(sys.stdin.readline().rstrip())
+a = list(map(int, sys.stdin.readline().rstrip().split()))
+m = int(sys.stdin.readline().rstrip())
+b = list(map(int, sys.stdin.readline().rstrip().split()))
 
 p1 = p2 = 0
 c = []

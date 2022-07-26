@@ -1,5 +1,7 @@
-n = int(input())
-a = list(map(int, input().split()))
+import sys
+
+n = int(sys.stdin.readline().rstrip())
+a = list(map(int, sys.stdin.readline().rstrip().split()))
 
 # python - round_half_even 채택
 # 짝수인 정수로 반올림

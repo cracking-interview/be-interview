@@ -1,5 +1,7 @@
-n = int(input())
-a = list(map(int, input().split()))
+import sys
+
+n = int(sys.stdin.readline().rstrip())
+a = list(map(int, sys.stdin.readline().rstrip().split()))
 
 def digit_sum(n):
     sum = 0

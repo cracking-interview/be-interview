@@ -1,5 +1,7 @@
+import sys
+
 res=0
-n=int(input())
+n=int(sys.stdin.readline().rstrip())
 
 for i in range(n):
     tmp=input().split()

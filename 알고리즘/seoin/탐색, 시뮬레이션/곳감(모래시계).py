@@ -1,7 +1,8 @@
-n = int(input())
-a = [list(map(int, input().split())) for _ in range(n)]
+import sys
 
-m = int(input())
+n = int(sys.stdin.readline().rstrip())
+a = [list(map(int, sys.stdin.readline().rstrip().split())) for _ in range(n)]
+m = int(sys.stdin.readline().rstrip())
 
 # lst.pop()
 # 함수의 인자로 0을 주면 0번 인덱스를 삭제하고 하나씩 왼쪽으로 당긴다. 
@@ -15,7 +16,7 @@ for i in range(m):
 # 첫번째 수는 행번호(h) 
 # 두 번째 수는 방향(t) : 0이면 왼쪽, 1이면 오른쪽
 # 세 번째 수는 회전하는 격자의 수(k)
-    h, t, k = map(int, input().split())
+    h, t, k = map(int, sys.stdin.readline().rstrip().split())
     if (t == 0):
         for _ in range(k):
             a[h-1].append(a[h-1].pop(0))

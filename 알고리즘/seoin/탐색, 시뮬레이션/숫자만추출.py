@@ -1,5 +1,7 @@
+import sys
+
 # 내 풀이
-str = input()
+str = sys.stdin.readline().rstrip()
 size = len(str)
 
 nums = ""
@@ -21,7 +23,7 @@ print(count)
 
 # 예시 풀이
 
-s = input()
+s = sys.stdin.readline().rstrip()
 res = 0
 for x in s:
     if x.isdecimal():

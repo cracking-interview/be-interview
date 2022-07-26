@@ -1,5 +1,7 @@
-n, m = map(int, input().split())
-a = list(map(int, input().split()))
+import sys
+
+n, m = map(int(sys.stdin.readline().rstrip()))
+a = list(map(int, sys.stdin.readline().rstrip().split()))
 
 count = 0
 for i in range(n):
@@ -21,8 +23,8 @@ print(count)
 
 
 # 예시 코드 - two pointer
-n, m=map(int, input().split())
-a=list(map(int, input().split()))
+n, m=map(int, sys.stdin.readline().rstrip())
+a=list(map(int, sys.stdin.readline().rstrip().split()))
 
 lt=0
 rt=1

@@ -1,4 +1,6 @@
-n, m = map(int, input().split())
+import sys
+
+n, m = map(int, sys.stdin.readline().rstrip().split()))
 a = [0] * (n+m+1)
 
 for i in range(1, n):

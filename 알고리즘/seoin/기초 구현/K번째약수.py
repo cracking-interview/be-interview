@@ -1,4 +1,6 @@
-n, k = map(int, input().split())
+import sys
+
+n, k = map(int, sys.stdin.readline().rstrip().split())
 cnt = 0
 # k 번째 약수
 # N의 약수들 중 K번째로 작은 수

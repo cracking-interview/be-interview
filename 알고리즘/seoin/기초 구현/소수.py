@@ -1,4 +1,6 @@
-n = int(input())
+import sys
+
+n = int(sys.stdin.readline().rstrip())
 
 ch = [0] * (n+1)
 cnt = 0
