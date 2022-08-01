@@ -303,7 +303,7 @@
     - **내부 단편화**가 발생한다.
 - 34. 세그먼테이션 전략
     
-    [https://camo.githubusercontent.com/a3baacb2690501708418c4c4f6d57614c361348696bdb0245bda566b6c613fe2/68747470733a2f2f6261636b746f6e792e6769746875622e696f2f6173736574732f696d672f706f73742f696e746572766965772f6f732d342e504e47](https://camo.githubusercontent.com/a3baacb2690501708418c4c4f6d57614c361348696bdb0245bda566b6c613fe2/68747470733a2f2f6261636b746f6e792e6769746875622e696f2f6173736574732f696d672f706f73742f696e746572766965772f6f732d342e504e47)
+    <img width="624" alt="image" src="https://user-images.githubusercontent.com/84627144/182091393-2a6bdb36-5c3f-447d-ae83-3b4f9cd99df2.png">
     
     - **프로세스의 주소공간을 서로 크기가 다른 논리적인 블록단위인 세그먼트로 분할하고 메모리에 배치하는 방식**
     - 프로세스는 논리적인 블록단위 세그먼트로 Code, Data, Stack & Heap 으로 나눌 수 있다.
@@ -323,7 +323,7 @@
     
     ### **이점**
     
-    [https://camo.githubusercontent.com/5729c4867ee7609540331515be2b5bc5b4e530daff7a9e401143480732d30cb3/68747470733a2f2f6261636b746f6e792e6769746875622e696f2f6173736574732f696d672f706f73742f696e746572766965772f6f732d352e504e47](https://camo.githubusercontent.com/5729c4867ee7609540331515be2b5bc5b4e530daff7a9e401143480732d30cb3/68747470733a2f2f6261636b746f6e792e6769746875622e696f2f6173736574732f696d672f706f73742f696e746572766965772f6f732d352e504e47)
+    <img width="300" alt="image" src="https://user-images.githubusercontent.com/84627144/182091450-5f752e35-7514-438d-9894-18b772133a8f.png">
     
     - **가상 메모리는 시스템 라이브러리가 여러 프로세스들 사이에 공유될 수 있도록 한다.**
     - **프로세스들이 메모리를 공유하는 것을 가능케 하고, 프로세스들은 공유 메모리를 통해 통신할 수 있다.**
