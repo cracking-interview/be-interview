@@ -15,3 +15,19 @@ class Solution {
         return ans
     }
 }
+
+class Solution {
+    fun twoSum(nums: IntArray, target: Int): IntArray {
+        val indexMap = mutableMapOf<Int, Int>()
+        for (i in nums.indices) {
+            val desired = target - nums[i]
+            indexMap[desired]?.let {
+                return intArrayOf(it, i)
+            }
+        indexMap[nums[i]] = i
+        }
+
+    throw IllegalStateException("The problem should have at least one solution")
+    }
+}
+
